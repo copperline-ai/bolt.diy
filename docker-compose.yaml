@@ -29,6 +29,10 @@ services:
       - VITE_LOG_LEVEL=${VITE_LOG_LEVEL:-debug}
       - DEFAULT_NUM_CTX=${DEFAULT_NUM_CTX:-32768}
       - RUNNING_IN_DOCKER=true
+      - WORK_DIR=/app/project
+      - SERVER_EXEC_TIMEOUT=120000
+    volumes:
+      - project-data:/app/project
     extra_hosts:
       - 'host.docker.internal:host-gateway'
     command: pnpm run dockerstart
@@ -66,6 +70,8 @@ services:
       - VITE_LOG_LEVEL=${VITE_LOG_LEVEL:-debug}
       - DEFAULT_NUM_CTX=${DEFAULT_NUM_CTX:-32768}
       - RUNNING_IN_DOCKER=true
+      - WORK_DIR=/app/project
+      - SERVER_EXEC_TIMEOUT=120000
     extra_hosts:
       - 'host.docker.internal:host-gateway'
     volumes:
@@ -74,6 +80,7 @@ services:
         target: /app
         consistency: cached
       - /app/node_modules
+      - project-data:/app/project
     ports:
       - '5173:5173'
     command: pnpm run dev --host 0.0.0.0
@@ -91,8 +98,15 @@ services:
       - OLLAMA_API_BASE_URL=http://127.0.0.1:11434
       - DEFAULT_NUM_CTX=${DEFAULT_NUM_CTX:-32768}
       - RUNNING_IN_DOCKER=true
+      - WORK_DIR=/app/project
+      - SERVER_EXEC_TIMEOUT=120000
+    volumes:
+      - project-data:/app/project
     extra_hosts:
       - 'host.docker.internal:host-gateway'
     command: pnpm run dockerstart
     profiles:
       - prebuilt
+
+volumes:
+  project-data:

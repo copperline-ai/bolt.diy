@@ -1,16 +1,22 @@
 # ---- build stage ----
-FROM node:22-bookworm-slim AS build
+FROM node:22-bookworm AS build
 WORKDIR /app
 
 # CI-friendly env
 ENV HUSKY=0
 ENV CI=true
 
-# Use pnpm
+# Use pnpm, install yarn and bun
 RUN corepack enable && corepack prepare pnpm@9.15.9 --activate
+RUN corepack prepare yarn@stable --activate
 
-# Ensure git is available for build and runtime scripts
-RUN apt-get update && apt-get install -y --no-install-recommends git \
+# Install bun globally
+RUN curl -fsSL https://bun.sh/install | bash
+ENV PATH="/root/.bun/bin:$PATH"
+
+# Install curl and git for build and runtime scripts
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl git \
   && rm -rf /var/lib/apt/lists/*
 
 # Accept (optional) build-time public URL for Remix/Vite (Coolify can pass it)
@@ -37,7 +43,7 @@ RUN pnpm prune --prod --ignore-scripts
 
 
 # ---- production stage ----
-FROM prod-deps AS bolt-ai-production
+FROM node:22-bookworm AS bolt-ai-production
 WORKDIR /app
 
 ENV NODE_ENV=production
@@ -57,11 +63,18 @@ ENV WRANGLER_SEND_METRICS=false \
 # Note: API keys should be provided at runtime via docker run -e or docker-compose
 # Example: docker run -e OPENAI_API_KEY=your_key_here ...
 
-# Install curl for healthchecks and copy bindings script
-RUN apt-get update && apt-get install -y --no-install-recommends curl \
+# Install system tools and package managers (well-equipped image)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl git \
   && rm -rf /var/lib/apt/lists/*
 
-# Copy built files and scripts
+# Install pnpm, yarn, and bun globally
+RUN corepack enable && corepack prepare pnpm@9.15.9 --activate
+RUN corepack prepare yarn@stable --activate
+RUN curl -fsSL https://bun.sh/install | bash
+ENV PATH="/root/.bun/bin:$PATH"
+
+# Copy built files and scripts from prod-deps stage
 COPY --from=prod-deps /app/build /app/build
 COPY --from=prod-deps /app/node_modules /app/node_modules
 COPY --from=prod-deps /app/package.json /app/package.json
@@ -85,7 +98,8 @@ CMD ["pnpm", "run", "dockerstart"]
 
 
 # ---- development stage ----
-FROM build AS development
+FROM node:22-bookworm AS development
+WORKDIR /app
 
 # Non-sensitive development arguments
 ARG VITE_LOG_LEVEL=debug
@@ -95,6 +109,16 @@ ARG DEFAULT_NUM_CTX
 ENV VITE_LOG_LEVEL=${VITE_LOG_LEVEL} \
     DEFAULT_NUM_CTX=${DEFAULT_NUM_CTX} \
     RUNNING_IN_DOCKER=true
+
+# Install system tools and package managers
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl git \
+  && rm -rf /var/lib/apt/lists/*
+
+RUN corepack enable && corepack prepare pnpm@9.15.9 --activate
+RUN corepack prepare yarn@stable --activate
+RUN curl -fsSL https://bun.sh/install | bash
+ENV PATH="/root/.bun/bin:$PATH"
 
 # Note: API keys should be provided at runtime via docker run -e or docker-compose
 # Example: docker run -e OPENAI_API_KEY=your_key_here ...
