@@ -4,6 +4,7 @@ import { generateId } from './fileUtils';
 export interface ProjectCommands {
   type: string;
   setupCommand?: string;
+  postInstallCommand?: string;
   startCommand?: string;
   followupMessage: string;
 }
@@ -23,7 +24,7 @@ function makeNonInteractive(command: string): string {
     { pattern: /npx\s+([^@\s]+@?[^\s]*)\s+init/g, replacement: 'echo "y" | npx --yes $1 init --defaults --yes' },
     { pattern: /npx\s+create-([^\s]+)/g, replacement: 'npx --yes create-$1 --template default' },
     { pattern: /npx\s+([^@\s]+@?[^\s]*)\s+add/g, replacement: 'npx --yes $1 add --defaults --yes' },
-    { pattern: /npm\s+install(?!\s+--)/g, replacement: 'npm install --yes --no-audit --no-fund --silent' },
+    { pattern: /npm\s+install(?!\s+--)/g, replacement: 'npm install --yes --no-audit --no-fund --loglevel=error' },
     { pattern: /yarn\s+add(?!\s+--)/g, replacement: 'yarn add --non-interactive' },
     { pattern: /pnpm\s+add(?!\s+--)/g, replacement: 'pnpm add --yes' },
   ];
@@ -65,20 +66,29 @@ export async function detectProjectCommands(files: FileContent[]): Promise<Proje
       const preferredCommands = ['dev', 'start', 'preview'];
       const availableCommand = preferredCommands.find((cmd) => scripts[cmd]);
 
-      // Build setup command with non-interactive handling
-      let baseSetupCommand = 'npx update-browserslist-db@latest && npm install';
+      // Build setup commands: npm install first (separate so it's not interrupted by slow post-install commands)
+      let installCommand = 'npm install';
+      installCommand = makeNonInteractive(installCommand);
+
+      const setupCommand = installCommand;
+
+      let postInstallCommand = '';
+
+      // Run browserslist update after install
+      postInstallCommand += 'npx update-browserslist-db@latest';
 
       // Add shadcn init if it's a shadcn project
       if (isShadcnProject) {
-        baseSetupCommand += ' && npx shadcn@latest init';
+        postInstallCommand += ' && npx shadcn@latest init';
       }
 
-      const setupCommand = makeNonInteractive(baseSetupCommand);
+      const postInstallSetupCommand = postInstallCommand ? makeNonInteractive(postInstallCommand) : '';
 
       if (availableCommand) {
         return {
           type: 'Node.js',
           setupCommand,
+          postInstallCommand: postInstallSetupCommand || undefined,
           startCommand: `npm run ${availableCommand}`,
           followupMessage: `Found "${availableCommand}" script in package.json. Running "npm run ${availableCommand}" after installation.`,
         };
@@ -87,6 +97,7 @@ export async function detectProjectCommands(files: FileContent[]): Promise<Proje
       return {
         type: 'Node.js',
         setupCommand,
+        postInstallCommand: postInstallSetupCommand || undefined,
         followupMessage:
           'Would you like me to inspect package.json to determine the available scripts for running this project?',
       };
@@ -117,6 +128,11 @@ export function createCommandsMessage(commands: ProjectCommands): Message | null
   if (commands.setupCommand) {
     commandString += `
 <boltAction type="shell">${commands.setupCommand}</boltAction>`;
+  }
+
+  if (commands.postInstallCommand) {
+    commandString += `
+<boltAction type="shell">${commands.postInstallCommand}</boltAction>`;
   }
 
   if (commands.startCommand) {
@@ -185,6 +201,11 @@ export function createCommandActionsString(commands: ProjectCommands): string {
   if (commands.setupCommand) {
     commandString += `
 <boltAction type="shell">${commands.setupCommand}</boltAction>`;
+  }
+
+  if (commands.postInstallCommand) {
+    commandString += `
+<boltAction type="shell">${commands.postInstallCommand}</boltAction>`;
   }
 
   if (commands.startCommand) {

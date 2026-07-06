@@ -126,6 +126,7 @@ export class BoltShell {
     this._watchExpoUrlInBackground(expoUrlStream);
 
     await this.waitTillOscCode('interactive');
+    terminal.input('export PATH="./node_modules/.bin:$PATH"\n');
     this.#initialized?.();
   }
 
