@@ -3,7 +3,7 @@ import { streamText } from '~/lib/.server/llm/stream-text';
 import type { IProviderSetting, ProviderInfo } from '~/types/model';
 import { generateText } from 'ai';
 import { PROVIDER_LIST } from '~/utils/constants';
-import { MAX_TOKENS, PROVIDER_COMPLETION_LIMITS, isReasoningModel } from '~/lib/.server/llm/constants';
+import { MAX_TOKENS, PROVIDER_COMPLETION_LIMITS, isReasoningModel, getReasoningProviderOptions } from '~/lib/.server/llm/constants';
 import { LLMManager } from '~/lib/modules/llm/manager';
 import type { ModelInfo } from '~/lib/modules/llm/types';
 import { getApiKeysFromCookie, getProviderSettingsFromCookie } from '~/lib/api/cookies';
@@ -178,14 +178,14 @@ async function llmCallAction({ context, request }: ActionFunctionArgs) {
 
       logger.info(`Generating response Provider: ${provider.name}, Model: ${modelDetails.name}`);
 
-      // DEBUG: Log reasoning model detection
       const isReasoning = isReasoningModel(modelDetails.name);
-      logger.info(`DEBUG: Model "${modelDetails.name}" detected as reasoning model: ${isReasoning}`);
 
-      // Use maxCompletionTokens for reasoning models (o1, GPT-5), maxTokens for traditional models
-      const tokenParams = isReasoning ? { maxCompletionTokens: dynamicMaxTokens } : { maxTokens: dynamicMaxTokens };
+      // Always use maxTokens for the AI SDK.
+      // maxCompletionTokens must be passed through providerOptions to actually work.
+      const tokenParams = { maxTokens: dynamicMaxTokens };
+      const reasoningProviderOpts = getReasoningProviderOptions(isReasoning, modelDetails.provider, dynamicMaxTokens);
 
-      // Filter out unsupported parameters for reasoning models
+      // Build params
       const baseParams = {
         system,
         messages: [
@@ -201,33 +201,14 @@ async function llmCallAction({ context, request }: ActionFunctionArgs) {
           providerSettings,
         }),
         ...tokenParams,
+        ...(reasoningProviderOpts || {}),
         toolChoice: 'none' as const,
       };
 
       // For reasoning models, set temperature to 1 (required by OpenAI API)
       const finalParams = isReasoning
-        ? { ...baseParams, temperature: 1 } // Set to 1 for reasoning models (only supported value)
+        ? { ...baseParams, temperature: 1 }
         : { ...baseParams, temperature: 0 };
-
-      // DEBUG: Log final parameters
-      logger.info(
-        `DEBUG: Final params for model "${modelDetails.name}":`,
-        JSON.stringify(
-          {
-            isReasoning,
-            hasTemperature: 'temperature' in finalParams,
-            hasMaxTokens: 'maxTokens' in finalParams,
-            hasMaxCompletionTokens: 'maxCompletionTokens' in finalParams,
-            paramKeys: Object.keys(finalParams).filter((key) => !['model', 'messages', 'system'].includes(key)),
-            tokenParams,
-            finalParams: Object.fromEntries(
-              Object.entries(finalParams).filter(([key]) => !['model', 'messages', 'system'].includes(key)),
-            ),
-          },
-          null,
-          2,
-        ),
-      );
 
       const result = await generateText(finalParams);
       logger.info(`Generated response`);

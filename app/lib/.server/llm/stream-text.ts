@@ -1,5 +1,5 @@
 import { convertToCoreMessages, streamText as _streamText, type Message } from 'ai';
-import { MAX_TOKENS, PROVIDER_COMPLETION_LIMITS, isReasoningModel, type FileMap } from './constants';
+import { MAX_TOKENS, PROVIDER_COMPLETION_LIMITS, isReasoningModel, getReasoningProviderOptions, type FileMap } from './constants';
 import { getSystemPrompt } from '~/lib/common/prompts/prompts';
 import { DEFAULT_MODEL, DEFAULT_PROVIDER, MODIFICATIONS_TAG_NAME, PROVIDER_LIST, WORK_DIR } from '~/utils/constants';
 import type { IProviderSetting } from '~/types/model';
@@ -221,11 +221,7 @@ export async function streamText(props: {
 
   logger.info(`Sending llm call to ${provider.name} with model ${modelDetails.name}`);
 
-  // Log reasoning model detection and token parameters
   const isReasoning = isReasoningModel(modelDetails.name);
-  logger.info(
-    `Model "${modelDetails.name}" is reasoning model: ${isReasoning}, using ${isReasoning ? 'maxCompletionTokens' : 'maxTokens'}: ${safeMaxTokens}`,
-  );
 
   // Validate token limits before API call
   if (safeMaxTokens > (modelDetails.maxTokenAllowed || 128000)) {
@@ -234,8 +230,18 @@ export async function streamText(props: {
     );
   }
 
-  // Use maxCompletionTokens for reasoning models (o1, GPT-5), maxTokens for traditional models
-  const tokenParams = isReasoning ? { maxCompletionTokens: safeMaxTokens } : { maxTokens: safeMaxTokens };
+  // Always use maxTokens for the AI SDK (the standard param).
+  // The SDK drops top-level maxCompletionTokens — to actually pass it,
+  // we go through providerOptions which maps to providerMetadata at model level.
+  const tokenParams = { maxTokens: safeMaxTokens };
+
+  // For reasoning models, pass maxCompletionTokens through providerOptions
+  // so the provider SDK includes it in the actual API call.
+  const reasoningProviderOpts = getReasoningProviderOptions(isReasoning, modelDetails.provider, safeMaxTokens);
+
+  logger.info(
+    `Model "${modelDetails.name}" is reasoning: ${isReasoning}, providerOptions: ${reasoningProviderOpts ? 'yes' : 'no'}`,
+  );
 
   // Filter out unsupported parameters for reasoning models
   const filteredOptions =
@@ -256,23 +262,6 @@ export async function streamText(props: {
         )
       : options || {};
 
-  // DEBUG: Log filtered options
-  logger.info(
-    `DEBUG STREAM: Options filtering for model "${modelDetails.name}":`,
-    JSON.stringify(
-      {
-        isReasoning,
-        originalOptions: options || {},
-        filteredOptions,
-        originalOptionsKeys: options ? Object.keys(options) : [],
-        filteredOptionsKeys: Object.keys(filteredOptions),
-        removedParams: options ? Object.keys(options).filter((key) => !(key in filteredOptions)) : [],
-      },
-      null,
-      2,
-    ),
-  );
-
   const streamParams = {
     model: provider.getModelInstance({
       model: modelDetails.name,
@@ -284,28 +273,11 @@ export async function streamText(props: {
     ...tokenParams,
     messages: convertToCoreMessages(processedMessages as any),
     ...filteredOptions,
+    ...(reasoningProviderOpts || {}),
 
     // Set temperature to 1 for reasoning models (required by OpenAI API)
     ...(isReasoning ? { temperature: 1 } : {}),
   };
-
-  // DEBUG: Log final streaming parameters
-  logger.info(
-    `DEBUG STREAM: Final streaming params for model "${modelDetails.name}":`,
-    JSON.stringify(
-      {
-        hasTemperature: 'temperature' in streamParams,
-        hasMaxTokens: 'maxTokens' in streamParams,
-        hasMaxCompletionTokens: 'maxCompletionTokens' in streamParams,
-        paramKeys: Object.keys(streamParams).filter((key) => !['model', 'messages', 'system'].includes(key)),
-        streamParams: Object.fromEntries(
-          Object.entries(streamParams).filter(([key]) => !['model', 'messages', 'system'].includes(key)),
-        ),
-      },
-      null,
-      2,
-    ),
-  );
 
   return await _streamText(streamParams);
 }

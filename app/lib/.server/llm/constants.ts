@@ -35,12 +35,45 @@ export const PROVIDER_COMPLETION_LIMITS: Record<string, number> = {
  * These models use internal reasoning tokens and have different API parameter requirements
  */
 export function isReasoningModel(modelName: string): boolean {
-  const result = /^(o1|o3|gpt-5)/i.test(modelName);
+  return /o[134]|gpt-5|deepseek-r1|deepseek-reasoner|reasoning|thinking|qwq/i.test(modelName);
+}
 
-  // DEBUG: Test regex matching
-  console.log(`REGEX TEST: "${modelName}" matches reasoning pattern: ${result}`);
+/*
+ * Build providerOptions for passing maxCompletionTokens to reasoning models.
+ * 
+ * The AI SDK drops top-level `maxCompletionTokens` (only `maxTokens` is extracted
+ * from CallSettings). The correct path is through `providerOptions`, which the SDK
+ * maps to `providerMetadata` and passes to the model's doGenerate/doStream.
+ *
+ * - OpenAI-based SDKs map `providerOptions.openai.maxCompletionTokens` → API body
+ * - DeepSeek SDK spreads `providerOptions.deepseek.*` directly into the API body
+ * - Non-OpenAI providers (Anthropic, Google, etc.) don't need this
+ */
+export function getReasoningProviderOptions(
+  isReasoning: boolean,
+  providerName: string,
+  completionTokens: number,
+): Record<string, unknown> | undefined {
+  if (!isReasoning) return undefined;
 
-  return result;
+  const openaiProviders = [
+    'OpenAI', 'OpenAILike', 'Github', 'Groq', 'Perplexity',
+    'xAI', 'Hyperbolic', 'Moonshot', 'HuggingFace', 'LMStudio',
+    'Zai', 'Together',
+  ];
+
+  if (openaiProviders.includes(providerName)) {
+    return { providerOptions: { openai: { maxCompletionTokens: completionTokens } } };
+  }
+
+  // DeepSeek uses @ai-sdk/deepseek which wraps @ai-sdk/openai-compatible.
+  // Properties under the provider key are spread directly into the API body,
+  // so we use snake_case to match the raw API parameter name.
+  if (providerName === 'Deepseek') {
+    return { providerOptions: { deepseek: { max_completion_tokens: completionTokens } } };
+  }
+
+  return undefined;
 }
 
 // limits the number of model responses that can be returned in a single request
