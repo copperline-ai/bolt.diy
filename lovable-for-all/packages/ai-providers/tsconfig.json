@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "target": "es2022",
+    "skipLibCheck": true,
+    "noEmit": true,
+    "lib": ["es2022", "dom"],
+    "baseUrl": ".",
+    "paths": {
+      "~/base-provider": ["./src/base-provider.ts"],
+      "~/types": ["./src/types.ts"]
+    }
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules"]
+}

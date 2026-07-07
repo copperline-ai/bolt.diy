@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "target": "es2022",
+    "declaration": true,
+    "declarationMap": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "lib": ["es2022"]
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules"]
+}

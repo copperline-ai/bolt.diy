@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: lovable-postgres
+    environment:
+      POSTGRES_USER: lovable
+      POSTGRES_PASSWORD: lovable
+      POSTGRES_DB: lovable
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    container_name: lovable-redis
+    ports:
+      - "6379:6379"
+
+volumes:
+  postgres_data:

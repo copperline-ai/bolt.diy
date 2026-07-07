@@ -1,0 +1,43 @@
+{
+  "name": "@lovable/api",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --port 3001",
+    "build": "next build",
+    "start": "next start --port 3001",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:push": "drizzle-kit push"
+  },
+  "dependencies": {
+    "@lovable/db": "workspace:*",
+    "@lovable/shared": "workspace:*",
+    "@lovable/ai-providers": "workspace:*",
+    "better-auth": "^1.0.0",
+    "next": "^16.2.10",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "hono": "^4.6.0",
+    "drizzle-orm": "^0.36.0",
+    "postgres": "^3.4.0",
+    "ioredis": "^5.4.0",
+    "ai": "^4.3.0",
+    "zod": "^3.24.0",
+    "stripe": "^17.0.0",
+    "bullmq": "^5.0.0",
+    "resend": "^4.0.0",
+    "@octokit/rest": "^21.0.2",
+    "@octokit/auth-app": "^7.1.0"
+  },
+  "devDependencies": {
+    "@better-auth/cli": "^1.4.21",
+    "@types/node": "^22.0.0",
+    "drizzle-kit": "^0.28.0",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "^16.2.10",
+    "typescript": "^5.7.0"
+  }
+}
