@@ -1,6 +1,6 @@
 import { createAppAuth } from "@octokit/auth-app";
 import { Octokit } from "@octokit/rest";
-import { db, schema, setCurrentOrg } from "@lovable/db";
+import { db, schema, setCurrentOrg } from "@hatchery/db";
 import { decrypt, encrypt } from "./encryption";
 import { eq } from "drizzle-orm";
 

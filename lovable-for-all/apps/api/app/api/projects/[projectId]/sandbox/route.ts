@@ -1,6 +1,6 @@
 import { withOrg } from "@/lib/middleware/with-org";
 import { getSandboxProvider } from "@/lib/sandbox";
-import { db, schema, setCurrentOrg } from "@lovable/db";
+import { db, schema, setCurrentOrg } from "@hatchery/db";
 import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 

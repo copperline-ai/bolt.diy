@@ -1,5 +1,5 @@
 {
-  "name": "@lovable/web",
+  "name": "@hatchery/web",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -10,7 +10,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@lovable/shared": "workspace:*",
+    "@hatchery/shared": "workspace:*",
     "next": "^16.2.10",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

@@ -26,13 +26,13 @@
       "@/*": [
         "./*"
       ],
-      "@lovable/db": [
+      "@hatchery/db": [
         "../../packages/db/src"
       ],
-      "@lovable/shared": [
+      "@hatchery/shared": [
         "../../packages/shared/src"
       ],
-      "@lovable/ai-providers": [
+      "@hatchery/ai-providers": [
         "../../packages/ai-providers/src"
       ]
     },

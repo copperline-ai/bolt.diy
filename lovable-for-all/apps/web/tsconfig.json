@@ -26,10 +26,10 @@
       "@/*": [
         "./*"
       ],
-      "@lovable/shared": [
+      "@hatchery/shared": [
         "../../packages/shared/src"
       ],
-      "@lovable/ui": [
+      "@hatchery/ui": [
         "../../packages/ui/src"
       ]
     },

@@ -17,13 +17,13 @@
       },
     },
     "apps/api": {
-      "name": "@lovable/api",
+      "name": "@hatchery/api",
       "version": "0.0.1",
       "dependencies": {
         "@daytona/sdk": "^0.194.0",
-        "@lovable/ai-providers": "workspace:*",
-        "@lovable/db": "workspace:*",
-        "@lovable/shared": "workspace:*",
+        "@hatchery/ai-providers": "workspace:*",
+        "@hatchery/db": "workspace:*",
+        "@hatchery/shared": "workspace:*",
         "@octokit/auth-app": "^7.1.0",
         "@octokit/rest": "^21.0.2",
         "ai": "^4.3.0",
@@ -50,11 +50,11 @@
       },
     },
     "apps/web": {
-      "name": "@lovable/web",
+      "name": "@hatchery/web",
       "version": "0.0.1",
       "dependencies": {
         "@assistant-ui/react": "^0.14.26",
-        "@lovable/shared": "workspace:*",
+        "@hatchery/shared": "workspace:*",
         "@radix-ui/react-collapsible": "^1.1.0",
         "@radix-ui/react-dialog": "^1.1.0",
         "@radix-ui/react-dropdown-menu": "^2.1.0",
@@ -99,7 +99,7 @@
       },
     },
     "packages/ai-providers": {
-      "name": "@lovable/ai-providers",
+      "name": "@hatchery/ai-providers",
       "version": "0.0.1",
       "dependencies": {
         "@ai-sdk/amazon-bedrock": "^1.0.6",
@@ -121,22 +121,22 @@
       },
     },
     "packages/db": {
-      "name": "@lovable/db",
+      "name": "@hatchery/db",
       "version": "0.0.1",
       "dependencies": {
-        "@lovable/shared": "workspace:*",
+        "@hatchery/shared": "workspace:*",
         "drizzle-orm": "^0.36.0",
         "drizzle-zod": "^0.5.0",
         "postgres": "^3.4.0",
       },
       "devDependencies": {
-        "@lovable/shared": "workspace:*",
+        "@hatchery/shared": "workspace:*",
         "drizzle-kit": "^0.28.0",
         "typescript": "^5.7.0",
       },
     },
     "packages/shared": {
-      "name": "@lovable/shared",
+      "name": "@hatchery/shared",
       "version": "0.0.1",
       "dependencies": {
         "zod": "^3.24.0",
@@ -433,6 +433,16 @@
 
     "@grpc/proto-loader": ["@grpc/proto-loader@0.8.1", "", { "dependencies": { "lodash.camelcase": "^4.3.0", "long": "^5.0.0", "protobufjs": "^7.5.5", "yargs": "^17.7.2" }, "bin": { "proto-loader-gen-types": "build/bin/proto-loader-gen-types.js" } }, "sha512-wtF6h+DY6M3YaDBPAmvuuA6jV8Sif9MjtOI5euKFWRgCDl5PeDpPsHR9u2l6St5ceY8AZgoNDww5+HvEsXFsGg=="],
 
+    "@hatchery/ai-providers": ["@hatchery/ai-providers@workspace:packages/ai-providers"],
+
+    "@hatchery/api": ["@hatchery/api@workspace:apps/api"],
+
+    "@hatchery/db": ["@hatchery/db@workspace:packages/db"],
+
+    "@hatchery/shared": ["@hatchery/shared@workspace:packages/shared"],
+
+    "@hatchery/web": ["@hatchery/web@workspace:apps/web"],
+
     "@humanwhocodes/config-array": ["@humanwhocodes/config-array@0.13.0", "", { "dependencies": { "@humanwhocodes/object-schema": "^2.0.3", "debug": "^4.3.1", "minimatch": "^3.0.5" } }, "sha512-DZLEEqFWQFiyK6h5YIeynKx7JlvCYWL0cImfSRXZ9l4Sg2efkFGTuFf6vzXjK1cq6IYkU+Eg/JizXw+TD2vRNw=="],
 
     "@humanwhocodes/module-importer": ["@humanwhocodes/module-importer@1.0.1", "", {}, "sha512-bxveV4V8v5Yb4ncFTT3rPSgZBOpCkjfK0y4oVVVJwIuDVBRMDXrPyXRL988i5ap9m9bnyEEjWfm5WkBmtffLfA=="],
@@ -506,16 +516,6 @@
     "@jridgewell/trace-mapping": ["@jridgewell/trace-mapping@0.3.31", "", { "dependencies": { "@jridgewell/resolve-uri": "^3.1.0", "@jridgewell/sourcemap-codec": "^1.4.14" } }, "sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw=="],
 
     "@js-sdsl/ordered-map": ["@js-sdsl/ordered-map@4.4.2", "", {}, "sha512-iUKgm52T8HOE/makSxjqoWhe95ZJA1/G1sYsGev2JDKUSS14KAgg1LHb+Ba+IPow0xflbnSkOsZcO08C7w1gYw=="],
-
-    "@lovable/ai-providers": ["@lovable/ai-providers@workspace:packages/ai-providers"],
-
-    "@lovable/api": ["@lovable/api@workspace:apps/api"],
-
-    "@lovable/db": ["@lovable/db@workspace:packages/db"],
-
-    "@lovable/shared": ["@lovable/shared@workspace:packages/shared"],
-
-    "@lovable/web": ["@lovable/web@workspace:apps/web"],
 
     "@mrleebo/prisma-ast": ["@mrleebo/prisma-ast@0.13.1", "", { "dependencies": { "chevrotain": "^10.5.0", "lilconfig": "^2.1.0" } }, "sha512-XyroGQXcHrZdvmrGJvsA9KNeOOgGMg1Vg9OlheUsBOSKznLMDl+YChxbkboRHvtFYJEMRYmlV3uoo/njCw05iw=="],
 

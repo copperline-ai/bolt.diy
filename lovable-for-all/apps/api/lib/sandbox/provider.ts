@@ -5,7 +5,7 @@ import type {
   SandboxProcessResult,
   SandboxStatus,
   SandboxProvider as SandboxProviderName,
-} from "@lovable/shared";
+} from "@hatchery/shared";
 
 export abstract class SandboxProvider implements ISandboxProvider {
   abstract readonly name: SandboxProviderName;

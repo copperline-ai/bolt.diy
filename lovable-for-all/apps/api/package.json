@@ -1,5 +1,5 @@
 {
-  "name": "@lovable/api",
+  "name": "@hatchery/api",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -14,9 +14,9 @@
   },
   "dependencies": {
     "@daytona/sdk": "^0.194.0",
-    "@lovable/ai-providers": "workspace:*",
-    "@lovable/db": "workspace:*",
-    "@lovable/shared": "workspace:*",
+    "@hatchery/ai-providers": "workspace:*",
+    "@hatchery/db": "workspace:*",
+    "@hatchery/shared": "workspace:*",
     "@octokit/auth-app": "^7.1.0",
     "@octokit/rest": "^21.0.2",
     "ai": "^4.3.0",

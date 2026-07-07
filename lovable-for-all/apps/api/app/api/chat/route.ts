@@ -1,7 +1,7 @@
 import { withOrg, getSession } from "@/lib/middleware/with-org";
 import { getDecryptedApiKey } from "@/lib/keys";
 import { streamChat } from "@/lib/chat/stream";
-import { db, schema, setCurrentOrg } from "@lovable/db";
+import { db, schema, setCurrentOrg } from "@hatchery/db";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 import type { Message } from "ai";

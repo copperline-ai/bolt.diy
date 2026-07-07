@@ -1,11 +1,11 @@
 services:
   postgres:
     image: postgres:16-alpine
-    container_name: lovable-postgres
+    container_name: hatchery-postgres
     environment:
-      POSTGRES_USER: lovable
-      POSTGRES_PASSWORD: lovable
-      POSTGRES_DB: lovable
+      POSTGRES_USER: hatchery
+      POSTGRES_PASSWORD: hatchery
+      POSTGRES_DB: hatchery
     ports:
       - "5432:5432"
     volumes:
@@ -13,7 +13,7 @@ services:
 
   redis:
     image: redis:7-alpine
-    container_name: lovable-redis
+    container_name: hatchery-redis
     ports:
       - "6379:6379"
 

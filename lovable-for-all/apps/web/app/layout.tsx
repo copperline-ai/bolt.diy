@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Lovable for All",
-  description: "AI-powered full-stack web development for everyone",
+  title: "Hatchery Studio",
+  description: "Build apps with your own AI.",
 };
 
 export default function RootLayout({

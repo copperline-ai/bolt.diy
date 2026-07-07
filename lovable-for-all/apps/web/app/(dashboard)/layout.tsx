@@ -6,7 +6,7 @@ export default function DashboardLayout({
   return (
     <div className="flex min-h-screen flex-col">
       <header className="border-b px-6 py-3">
-        <span className="font-semibold">Lovable for All</span>
+        <span className="font-semibold">Hatchery Studio</span>
       </header>
       <main className="flex-1 p-6">{children}</main>
     </div>

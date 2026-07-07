@@ -5,7 +5,7 @@ import type {
   SandboxFile,
   SandboxProcessResult,
   SandboxStatus,
-} from "@lovable/shared";
+} from "@hatchery/shared";
 
 export class DaytonaProvider implements ISandboxProvider {
   readonly name = "daytona" as const;

@@ -1,6 +1,6 @@
 import { streamText as vercelStreamText, convertToCoreMessages, type Message } from "ai";
-import { llmManager } from "@lovable/ai-providers";
-import type { ChatMode } from "@lovable/shared";
+import { llmManager } from "@hatchery/ai-providers";
+import type { ChatMode } from "@hatchery/shared";
 
 export interface StreamChatOptions {
   messages: Message[];

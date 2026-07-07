@@ -4,12 +4,12 @@ on:
   push:
     branches: [main]
     paths:
-      - "lovable-for-all/apps/web/**"
-      - "lovable-for-all/packages/shared/**"
+      - "hatchery-studio/apps/web/**"
+      - "hatchery-studio/packages/shared/**"
 
 defaults:
   run:
-    working-directory: lovable-for-all
+    working-directory: hatchery-studio
 
 jobs:
   deploy:
@@ -25,13 +25,13 @@ jobs:
         run: bun install --frozen-lockfile
 
       - name: Build static frontend
-        run: bun run build --filter=@lovable/web
+        run: bun run build --filter=@hatchery/web
 
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/pages-action@v1
         with:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: lovable-for-all
+          projectName: hatchery-studio
           directory: apps/web/dist
           branch: main
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}

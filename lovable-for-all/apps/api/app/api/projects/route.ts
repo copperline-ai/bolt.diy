@@ -1,5 +1,5 @@
 import { withOrg } from "@/lib/middleware/with-org";
-import { db, schema, setCurrentOrg } from "@lovable/db";
+import { db, schema, setCurrentOrg } from "@hatchery/db";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 

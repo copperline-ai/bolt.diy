@@ -4,14 +4,14 @@ on:
   push:
     branches: [main]
     paths:
-      - "lovable-for-all/apps/api/**"
-      - "lovable-for-all/packages/db/**"
-      - "lovable-for-all/packages/shared/**"
-      - "lovable-for-all/packages/ai-providers/**"
+      - "hatchery-studio/apps/api/**"
+      - "hatchery-studio/packages/db/**"
+      - "hatchery-studio/packages/shared/**"
+      - "hatchery-studio/packages/ai-providers/**"
 
 defaults:
   run:
-    working-directory: lovable-for-all
+    working-directory: hatchery-studio
 
 jobs:
   deploy:
@@ -27,12 +27,12 @@ jobs:
         run: bun install --frozen-lockfile
 
       - name: Typecheck
-        run: bun run typecheck --filter=@lovable/api
+        run: bun run typecheck --filter=@hatchery/api
 
       - name: Deploy to Railway
         uses: railwayapp/railway-deploy@v1
         with:
-          service: lovable-api
+          service: hatchery-api
           environment: production
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}

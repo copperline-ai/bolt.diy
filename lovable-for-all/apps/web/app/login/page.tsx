@@ -8,7 +8,7 @@ export default function LoginPage() {
     <main className="flex min-h-screen items-center justify-center">
       <div className="w-full max-w-sm space-y-6 rounded-lg border p-8 shadow-sm">
         <div className="space-y-2 text-center">
-          <h1 className="text-2xl font-bold">Welcome to Lovable for All</h1>
+          <h1 className="text-2xl font-bold">Welcome to Hatchery Studio</h1>
           <p className="text-muted-foreground">Sign in to start building.</p>
         </div>
         <button

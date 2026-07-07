@@ -4,7 +4,7 @@ set -euo pipefail
 # Provision Railway infrastructure for Lovable for All
 # Requires: railway CLI authenticated (`railway login`)
 
-PROJECT_NAME="lovable-for-all"
+PROJECT_NAME="hatchery-studio"
 
 # Create project and link directory
 cd "$(dirname "$0")/../apps/api"
@@ -26,7 +26,7 @@ railway variables set \
   GITHUB_APP_CLIENT_ID="YOUR_GITHUB_APP_CLIENT_ID" \
   GITHUB_APP_CLIENT_SECRET="YOUR_GITHUB_APP_CLIENT_SECRET" \
   RESEND_API_KEY="YOUR_RESEND_API_KEY" \
-  EMAIL_FROM="noreply@lovableforall.com" \
+  EMAIL_FROM="noreply@hatcheryforall.com" \
   STRIPE_SECRET_KEY="sk_test_..." \
   STRIPE_WEBHOOK_SECRET="whsec_..." \
   DAYTONA_API_KEY="YOUR_DAYTONA_API_KEY" \

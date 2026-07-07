@@ -6,7 +6,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const nextConfig = {
   output: "export",
-  transpilePackages: ["@lovable/shared", "@lovable/ui"],
+  transpilePackages: ["@hatchery/shared"],
   images: {
     unoptimized: true,
   },

@@ -1,5 +1,5 @@
 import { DaytonaProvider } from "./daytona";
-import type { ISandboxProvider, SandboxProvider as SandboxProviderName } from "@lovable/shared";
+import type { ISandboxProvider, SandboxProvider as SandboxProviderName } from "@hatchery/shared";
 
 const providers = new Map<SandboxProviderName, ISandboxProvider>();
 

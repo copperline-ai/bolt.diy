@@ -1,4 +1,4 @@
-import { db, schema, setCurrentOrg } from "@lovable/db";
+import { db, schema, setCurrentOrg } from "@hatchery/db";
 import { decrypt, encrypt, hashKey } from "./encryption";
 import { eq } from "drizzle-orm";
 

@@ -1,7 +1,7 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { organization } from "better-auth/plugins";
-import { db, schema } from "@lovable/db";
+import { db, schema } from "@hatchery/db";
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {

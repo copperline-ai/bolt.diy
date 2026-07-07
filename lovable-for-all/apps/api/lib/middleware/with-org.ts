@@ -1,5 +1,5 @@
 import { auth } from "@/lib/auth";
-import { db, setCurrentOrg } from "@lovable/db";
+import { db, setCurrentOrg } from "@hatchery/db";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 
