@@ -9,3 +9,4 @@ export const db = drizzle(client, { schema });
 
 export { schema };
 export * from "./schema";
+export * from "./rls";
